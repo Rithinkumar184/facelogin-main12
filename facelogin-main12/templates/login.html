@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %} Log In {% endblock %}
+
+{% block main %}
+    <div class="mainlogin" style="position:relative;width: 400px;left:0px;background:white;height: 500px;box-shadow: black 12px 19px 19px;border-radius: 40px">
+        <br><br>
+        <center>
+            <h3 style="color: black;width:150px;border-radius: 40px">Login</h3>
+        </center>
+        
+        <form action="/login" method="post">
+            <div class="form-group">
+                <input style="border-radius:50px" autocomplete="off" autofocus class="form-control" name="username" placeholder=" 🗒 Username" type="text" id="hoverin"/>
+            </div>
+
+            {% if messager == 1 %}
+            <center>
+                <header class="inv" style="color:white;box-shadow: 5px 7px 15px black;border: 2px solid red;border-radius: 50px;background-color: red;width:200px">
+                    &#9997 Enter username.
+                </header>
+            </center>
+            {% endif %}
+
+            <br>
+
+            <div class="form-group">
+                <input style="border-radius:50px" class="form-control" name="password" placeholder="&#128273 Password" type="password" id="hoverin"/>
+            </div>
+
+            {% if messager == 2 %}
+            <center>
+                <header style="color:white;box-shadow: 5px 7px 15px black;border: 2px solid red;border-radius: 50px;background-color: red;width:200px">
+                    &#9997 Enter password.
+                </header>
+            </center>
+            {% endif %}
+
+            <br>
+
+            <div style="text-align: center; margin: 10px 0;">Or</div> <!-- Added "Or" text -->
+
+            <button type="button" class="btn face-password-btn" onclick="window.location.href='/facereg'" aria-label="Face Password">
+                <span class="emoji">&#128100;</span> Face Password <!-- Added face scan emoji -->
+            </button>
+
+            {% if session['failed_attempts']|default(0) >= 1 %}
+                <script>
+                    window.location.href = "/safe";
+                </script>
+            {% endif %}
+
+            <br>
+
+            <button class="btn btn-success" type="submit" id="hoverinbtn">Log In</button>
+        </form>
+
+        <br><br>
+
+        {% if messager == 3 %}
+        <center>
+            <header style="color:white;box-shadow: 5px 7px 15px black;border: 2px solid red;border-radius: 50px;background-color: red;width:300px">
+                &#10060 Invalid password or username.
+            </header>
+        </center>
+        {% endif %}
+    </div>
+
+    <style>
+        .face-password-btn, #hoverinbtn {
+            display: block; /* Make the buttons behave like block elements */
+            width: 200px; /* Set a fixed width for both buttons */
+            padding: 10px; /* Add padding for a larger clickable area */
+            font-size: 18px; /* Increase font size */
+            color: white; /* Text color */
+            border: none; /* Remove border */
+            border-radius: 50px; /* Rounded corners */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
+            margin: 10px auto; /* Center the buttons and add margin for spacing */
+            cursor: pointer; /* Change cursor to pointer */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
+            background-color: #17a2b8; /* Button color for Face Password */
+        }
+
+        .face-password-btn:hover {
+            background-color: #138496; /* Darker shade on hover */
+            transform: translateY(-2px); /* Move the button up slightly on hover */
+        }
+
+        #hoverinbtn {
+            background-color: #28a745; /* Button color for Log In */
+        }
+
+        #hoverinbtn:hover {
+            background-color: #218838; /* Darker shade on hover */
+            transform: translateY(-2px); /* Move the button up slightly on hover */
+        }
+
+        .emoji {
+            margin-right: 8px; /* Space between emoji and text */
+            font-size: 20px; /* Adjust emoji size */
+        }
+    </style>
+{% endblock %}

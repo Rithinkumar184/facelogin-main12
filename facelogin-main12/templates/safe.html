@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+{% block title %} Safe Code Entry {% endblock %}
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Code Entry</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e3e3e3;
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            width: 350px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+            text-align: center;
+            transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effect */
+        }
+        input:hover {
+            border-color: #28a745; /* Change border color on hover */
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Add shadow on hover */
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s; /* Transition for smooth effect */
+        }
+        button:hover {
+            background: #218838; /* Change background color on hover */
+            transform: scale(1.05); /* Slightly enlarge button on hover */
+        }
+        .forgot-link {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .emoji {
+            font-size: 50px; /* Adjust emoji size */
+            margin-top: 10px; /* Space above emoji */
+            display: none; /* Initially hidden */
+            animation: bounce 0.5s infinite; /* Add bounce animation */
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Safe Code</h2>
+        <input type="text" id="userIdInput" placeholder="🆔 Enter User ID">
+        <input type="password" id="safeCodeInput" placeholder="🔑 Enter Safe Code">
+        <p id="error-message" class="error-message"></p>
+        <button onclick="validateSafeCode()">Submit</button>
+        <a href="/forgot_pin" class="forgot-link">Forgot Safe Code?</a>
+        <div id="emojiContainer">
+            <span id="successEmoji" class="emoji">😌</span> <!-- Relief emoji -->
+            <span id="errorEmoji" class="emoji">😟</span> <!-- Tension emoji -->
+        </div>
+    </div>
+
+    <script>
+        function validateSafeCode() {
+            const userId = document.getElementById("userIdInput").value;
+            const safeCode = document.getElementById("safeCodeInput").value;
+            const errorMessage = document.getElementById("error-message");
+            const successEmoji = document.getElementById("successEmoji");
+            const errorEmoji = document.getElementById("errorEmoji");
+
+            // Clear previous messages and emojis
+            errorMessage.textContent = '';
+            successEmoji.style.display = 'none';
+            errorEmoji.style.display = 'none';
+
+            fetch('/safe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: userId, code : safeCode }) // Include user_id in the payload
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    successEmoji.style.display = 'inline'; // Show relief emoji
+                    window.location.href = data.redirect; 
+                } else {
+                    errorMessage.textContent = data.message;
+                    errorEmoji.style.display = 'inline'; // Show tension emoji
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                errorMessage.textContent = "An error occurred. Please try again.";
+                errorEmoji.style.display = 'inline'; // Show tension emoji
+            });
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

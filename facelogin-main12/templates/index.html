@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Face Authentication System
+{% endblock %}
+
+{% block main %}
+<body>
+    <div class="container">
+        <h1>Face Authentication System</h1>
+        
+        <div class="message-container">
+            {% if message == "registered" %}
+                <p style="color: green; font-weight: bold;">
+                    <span class="animated-symbol move-around">✅</span>
+                </p>
+                <p>You have successfully registered in Face Authentication.</p>
+            {% elif message == "facesetup" %}
+                <p style="color: blue; font-weight: bold;">
+                    <span class="animated-symbol move-around">🎭</span>
+                </p>
+                <p>Your face setup was successfully registered.</p>
+            {% elif message == "login" %}
+                <p style="color: green; font-weight: bold;">
+                    <span class="animated-symbol move-around">🔓</span>
+                </p>
+                <p>You have successfully logged into the Face Authentication system.</p>
+            {% else%} 
+                 <p style="color: green; font-weight: bold">
+                    <span class="animated-symbol move-around"> 🔓</span>
+                 </p> 
+                 <p>You have successfully logged into the Face Authentication system.</p> 
+            {% endif %}
+        </div>
+    </div>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            text-align: center; /* Center text */
+            background-color: #f0f0f0; /* Light background for contrast */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .message-container {
+            font-size: 24px; /* Increase font size for text */
+        }
+
+        .animated-symbol {
+            display: inline-block;
+            font-size: 100px; /* Increase symbol size */
+            animation: bounce 1s infinite;
+            transition: transform 0.3s; /* Smooth transition for scaling */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+        }
+
+        .move-around {
+            animation: moveAround 5s infinite; /* Move around animation */
+        }
+
+        @keyframes moveAround {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(200px, -100px); /* Move to the right and up */
+            }
+            50% {
+                transform: translate(-200px, 100px); /* Move to the left and down */
+            }
+            75% {
+                transform: translate(100px, 200px); /* Move to the right and down */
+            }
+            100% {
+                transform: translate(0, 0); /* Return to original position */
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px); /* Increase bounce height */
+            }
+            60% {
+                transform: translateY(-7px); /* Increase bounce height */
+            }
+        }
+    </style>
+</body>
+</html>
+
+
+
+{% endblock %}
